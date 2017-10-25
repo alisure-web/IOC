@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <!--
+    scope="prototype" 取消单例
+    init-method="init" 初始化方法
+    destroy-method="destroy" 销毁方法
+    -->
+    <bean id="testIoC" class="test.spring.ioc.TestIoC"
+          scope="prototype"
+          init-method="init"
+          destroy-method="destroy"
+    />
+    <bean id="testIoC2" class="test.spring.ioc.TestIocFactory"
+          factory-method="getInstance"
+    />
+
+    <!--
+        依赖注入  对属性赋值
+    -->
+    <bean id="student" class="test.spring.dependentInjection.Student">
+        <property name="age" value="12"></property>
+        <property name="name" value="lishuo"></property>
+    </bean>
+    <bean id="teacher" class="test.spring.dependentInjection.Teacher">
+        <constructor-arg index="0" type="java.lang.String" value="test name"/>
+        <constructor-arg index="1" type="test.spring.dependentInjection.Student" ref="student"/>
+        <property name="name" value="老师名字"></property>
+        <property name="student" ref="student"></property>
+        <property name="list">
+            <list>
+                <value>one</value>
+                <value>two</value>
+                <value>three</value>
+            </list>
+        </property>
+        <property name="map">
+            <map>
+                <entry key="1" value="first"  />
+                <entry key="2" value="second" />
+                <entry key="3" value="third"  />
+            </map>
+        </property>
+        <property name="set">
+            <set>
+                <value>111</value>
+                <value>222</value>
+                <value>333</value>
+            </set>
+        </property>
+    </bean>
+
+    <!--
+        注解实现依赖注入
+    -->
+    <!--启动扫描类的注解解析器-->
+    <context:annotation-config />
+    <bean id="classInfo" class="test.spring.annotation.ClassInfo"></bean>
+    <bean id="test" class="test.spring.annotation.ClassInfo"></bean>
+    <bean id="teacher-2" class="test.spring.annotation.Teacher"></bean>
+    <!--启动依赖注入的注解解析器-->
+    <context:component-scan base-package="test.spring.annotation" />
+
+</beans>
